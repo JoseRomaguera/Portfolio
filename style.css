@@ -1,0 +1,110 @@
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.section {
+    padding: 20px 0;
+    margin: 20px 0;
+}
+
+/* Estilo del perfil */
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #f4f4f4;
+}
+
+.name {
+    font-size: 28px;
+    margin: 10px 0;
+    color: #f4f4f4;
+}
+
+/* Estilos para títulos */
+h2 {
+    color: #f4f4f4;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 36px; /* Aumenta el tamaño del título */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #f4f4f4;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+/* Proyectos en una sola columna con superposición oscura */
+.projects-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.project {
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 250px; /* Ajusta esta altura para que coincida con la relación de aspecto deseada */
+}
+
+.project img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(70%); /* Oscurece la imagen para que el texto destaque más */
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+.project .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Capa oscura sobre la imagen */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1; /* Siempre visible */
+    z-index: 2;
+}
+
+.project .overlay h3 {
+    font-size: 24px;
+    margin: 0;
+    text-align: center;
+    z-index: 3;
+}
+
+.project:hover img {
+    transform: scale(1.01);
+}
+
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
