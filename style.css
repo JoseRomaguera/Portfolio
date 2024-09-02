@@ -82,7 +82,7 @@ h2 {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Capa oscura sobre la imagen */
+    background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
     display: flex;
     justify-content: center;
@@ -107,4 +107,37 @@ footer {
     color: #fff;
     text-align: center;
     padding: 10px 0;
+}
+
+.icon-container {
+    display: flex;
+    gap: 20px;
+}
+
+.icon {
+    text-decoration: none;
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.icon img {
+    width: 70%; /* Se ajusta al 100% del contenedor */
+    height: 70%; /* Se ajusta al 100% del contenedor */
+    object-fit: cover; /* Escala la imagen manteniendo su proporción y cubriendo completamente el contenedor */
+}
+
+.icon i {
+    font-size: 20px;
+}
+
+.icon:hover {
+    background-color: white;
+    color: #4B0082; /* Cambiar el color del ícono al fondo al pasar el mouse */
 }
