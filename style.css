@@ -30,6 +30,14 @@ body p.desc-text {
     margin-right: 20%;
 }
 
+@media (max-width: 768px) {
+    body p.desc-text {
+        font-size: 15px;
+        margin-left: 0%;
+        margin-right: 0%;
+    }
+}
+
 .profile-img {
     width: 150px;
     height: 150px;
