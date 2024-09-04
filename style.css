@@ -30,7 +30,7 @@ body p.desc-text {
     margin-right: 20%;
 }
 
-@media (max-width: 768px) {
+@media (orientation: portrait) {
     body p.desc-text {
         font-size: 15px;
         margin-left: 0%;
