@@ -24,7 +24,7 @@ body {
     margin-bottom: 20px;
 }
 
-.desc-text {
+body p.desc-text {
     font-size: 25px;
     margin-left: 15%;
     margin-right: 20%;
