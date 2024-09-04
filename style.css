@@ -28,13 +28,15 @@ body p.desc-text {
     font-size: 25px;
     margin-left: 15%;
     margin-right: 20%;
+    text-align: left;
 }
 
 @media (orientation: portrait) {
     body p.desc-text {
-        font-size: 15px;
+        font-size: 16px;
         margin-left: 0%;
         margin-right: 0%;
+        text-align: justify;
     }
 }
 
