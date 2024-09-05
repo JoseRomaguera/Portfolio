@@ -1,0 +1,30 @@
+
+body p.desc-text,
+body .desc-text li {
+    font-size: 25px;
+    margin-left: 15%;
+    margin-right: 20%;
+    text-align: left;
+}
+
+@media (orientation: portrait) {
+    body p.desc-text,
+    body li.desc-text {
+        font-size: 16px;
+        margin-left: 0%;
+        margin-right: 0%;
+        text-align: justify;
+    }
+}
+
+body div.video-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+}
+
+body .video-preview iframe {
+    width: 50%;
+    aspect-ratio: 16/9;
+}
