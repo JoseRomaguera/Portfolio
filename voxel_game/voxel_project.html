@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Jose Romaguera</title>
+    <link rel="stylesheet" href="../common_style.css">
+    <link rel="stylesheet" href="voxel_style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sección del Proyecto -->
+        <section class="project-section section">
+            <div class="banner">
+                <img src="preview.png" alt="Voxel Game" class="project-banner-image">
+                <h2 class="banner-title">Voxel Game</h2>
+            </div>
+            
+            <div class="project-description">
+                <h3>What is Voxel Game?</h3>
+
+                <p class="desc-text">
+                    This is a hobby project I created for fun and learning.<br>
+                    It's a Minecraft clone, featuring:
+                    <ul class="desc-text">
+                        <li><a href="#100km">Infinite Procedural Generation</a></li>
+                        <li><a href="#100km">100km Render Distance</a></li>
+                        <li>Greedy Meshing</li>
+                        <li>Ray Marching</li>
+                        <li>Multiplayer</li>
+                        <li><a href="#networking">Custom Networking Library</a></li>
+                        <li>3D Skeletal Animation</li>
+                        <li>Immersive Atmospheric Shader</li>
+                        <li>Diffuse and Ambient Lighting</li>
+                        <li>Axis Aligned 3D Physics</li>
+                    </ul>
+                </p>
+            </div>
+            
+            <div class="project-participation">
+                <h3 id="100km">Procedural Generation and 100km Rendering</h3>
+                <p class="desc-text">
+                    All noise functions where written from scratch to gain a deep understanding of how to
+                    create high-quality procedural generation with endless posibilities.<br>
+
+                    The rendering process is divided into three layers:
+                    <ul class="desc-text">
+                        <li>Normal rasterization: Uses straightforward greedy meshing</li>
+                        <li>Ray Marching with 3x3 cubes, allowing visibility of structures from several kilometers away</li>
+                        <li>
+                            A terrain layer that renders only the surface, including biomes and mountains. 
+                            This enables a render distance of up to 100km, sufficient when considering atmospheric fading in the distance.
+                        </li>
+                    </ul>
+                </p>
+
+                <img class="screenshot" src="unknown3.png">
+
+                <p class="desc-text">
+                    The world is procedurally generated using various techniques:
+                    <ul class="desc-text">
+                        <li>Biomes are distributed using Voronoi Noise</li>
+                        <li>Terrain height is determined by multiple layers of Perlin Noise</li>
+                        <li>Mountains and rivers are generated using Fractal Noise</li>
+                    </ul>
+                </p>
+            </div>
+
+            <div class="project-participation">
+                <h3 id="networking">Networking</h3>
+                <p class="desc-text">
+                    To support multiplayer functionality, I developed a custom networking library with the following features:
+                    <ul class="desc-text">
+                        <li>Client-server connection</li>
+                        <li>Reliable in-order message delivery</li>
+                        <li>Optional unordered message delivery (faster and uses less bandwidth)</li>
+                    </ul>
+                </p>
+                <p class="desc-text">
+                    The library was built using Winsock and UDP sockets. The goal was to provide both reliable but slower message delivery, 
+                    as well as faster, unreliable message options. <br>
+                    Unlike TCP, which only supports reliable messages, and pure UDP, which lacks connections and reliable in-order messaging, this library combines the best of both approaches.
+                </p>
+            </div>
+
+            <div class="project-links">
+                <h3>Links</h3>
+                <ul>
+                    <p class="desc-text">YouTube: <a target="_blank" href="https://youtu.be/02UK8YKMJ6Q?si=R-zKZatdkxuFqKhk">https://youtu.be/02UK8YKMJ6Q?si=R-zKZatdkxuFqKhk</a></p>
+                    <p class="desc-text">YouTube: <a target="_blank" href="https://youtu.be/exQFCryX49U?si=AedqlxAXvTbI8vmf">https://youtu.be/exQFCryX49U?si=AedqlxAXvTbI8vmf</a></p>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2024 Jose Romaguera. All rights reserved.</p>
+    </footer>
+</body>
+</html>
