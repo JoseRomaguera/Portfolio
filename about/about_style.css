@@ -53,6 +53,13 @@ body {
     margin: 20px 0;
 }
 
+.project-description h1, .project-participation h1, .project-links h1 {
+    color: #f4f4f4;
+    font-size: 50px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
 .project-description h3, .project-participation h3, .project-links h3 {
     color: #f4f4f4;
     font-size: 28px;
