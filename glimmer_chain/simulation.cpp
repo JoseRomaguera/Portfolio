@@ -1,36 +1,32 @@
 #include "level/player.h"
 
-//////////////////////////////// ENTITY SYSTEM ////////////////////////////////
+//- Entity System 
 
-#define SV_ENTITY_SYSTEM_DEF() auto sys = &sim->entity_system
+#define ENTITY_SYSTEM_DEF() auto sys = &sim->entity_system
 
-static void compute_sparse_transform(v2 p, v2 s, f32 r, v2* position_, v2* size_)
+internal_fn void compute_sparse_transform(v2 p, v2 s, f32 r, v2* position_, v2* size_)
 {
     *position_ = p;
     
-    if (ABS(r) < f32_epsilon)
-    {
+    if (ABS(r) < f32_epsilon) {
         *size_ = s;
     }
-    else
-    {
+    else {
         f32 s0 = v2_length(s);
         *size_ = {s0, s0};
     }
 }
 
-static b8 entity_sparse_map_filter(Entity* entity)
+internal_fn b8 entity_sparse_map_filter(Entity* entity)
 {
-    if (!layer_is_active(entity->render_layer))
-        return FALSE;
-    
+    if (!layer_is_active(entity->render_layer)) return FALSE;
     return TRUE;
 }
 
-static void entity_remove_sparse_map(Simulation* sim, Entity* entity)
+internal_fn void entity_remove_sparse_map(Simulation* sim, Entity* entity)
 {
     SV_PROFILE();
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     
     if (!(entity->flags & EntityFlag_InSparseMap))
         return;
@@ -42,10 +38,10 @@ static void entity_remove_sparse_map(Simulation* sim, Entity* entity)
     entity->flags &= ~EntityFlag_InSparseMap;
 }
 
-static void entity_add_sparse_map(Simulation* sim, Entity* entity)
+internal_fn void entity_add_sparse_map(Simulation* sim, Entity* entity)
 {
     SV_PROFILE();
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     
     if (!entity_sparse_map_filter(entity) || (entity->flags & EntityFlag_InSparseMap))
         return;
@@ -57,9 +53,9 @@ static void entity_add_sparse_map(Simulation* sim, Entity* entity)
     entity->flags |= EntityFlag_InSparseMap;
 }
 
-static void entity_update_sparse_map(Simulation* sim, Entity* entity, v2 position, v2 size, f32 rotation)
+internal_fn void entity_update_sparse_map(Simulation* sim, Entity* entity, v2 position, v2 size, f32 rotation)
 {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     
     if (!entity_sparse_map_filter(entity))
     {
@@ -80,9 +76,9 @@ static void entity_update_sparse_map(Simulation* sim, Entity* entity, v2 positio
     sparse_map_update(&sys->sparse_map, (u64)entity, p0, s0, p1, s1);
 }
 
-static void entity_system_initialize(Simulation* sim)
+internal_fn void entity_system_initialize(Simulation* sim)
 {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     sys->entities = table_make<Entity>(sim->arena, 1024);
     sys->sparse_map = sparse_map_make(sim->arena, 5.f);
     
@@ -96,25 +92,24 @@ static void entity_system_initialize(Simulation* sim)
     }
 }
 
-static void entity_system_close(Simulation* sim)
+internal_fn void entity_system_close(Simulation* sim)
 {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     
+    Entity* destroy = NULL;
+    foreach_entity(sim, it)
     {
-        Entity* destroy = NULL;
-        foreach_entity(sim, it)
-        {
-            if (destroy != NULL) entity_destroy(sim, entity_get_id(destroy), FALSE, NULL);
-            destroy = it.value;
-        }
-        
         if (destroy != NULL) entity_destroy(sim, entity_get_id(destroy), FALSE, NULL);
+        destroy = it.value;
     }
+    
+    if (destroy != NULL) entity_destroy(sim, entity_get_id(destroy), FALSE, NULL);
 }
 
-static void entity_system_update(Simulation* sim)
+internal_fn void entity_system_update(Simulation* sim)
 {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
+    
     if (sys->destroy_request)
     {
         Entity* destroy = NULL;
@@ -143,7 +138,7 @@ static void entity_system_update(Simulation* sim)
 #endif
 }
 
-static u64 generate_entity_id()
+internal_fn u64 generate_entity_id()
 {
     static u32 count = 0;
     u64 id = timer_seed();
@@ -154,7 +149,7 @@ static u64 generate_entity_id()
 
 Entity* entity_create_ex(Simulation* sim, u64 type, u64 id, const void* desc)
 {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     
     Entity* entity = table_add(&sys->entities, id);
     
@@ -207,7 +202,7 @@ u64 entity_create(Simulation* sim, u64 type, const void* desc)
 
 void entity_destroy(Simulation* sim, u64 id, b8 dead, const void* desc)
 {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     
     Entity* entity = entity_get(sim, id);
     if (entity == NULL) return;
@@ -234,9 +229,7 @@ void entity_destroy(Simulation* sim, u64 id, b8 dead, const void* desc)
 u64 entity_duplicate(Simulation* sim, u64 id)
 {
     Entity* entity = entity_get(sim, id);
-    
-    if (entity == NULL)
-        return 0;
+    if (entity == NULL) return 0;
     
     u64 duplicated_id = entity_create(sim, entity->type, NULL);
     Entity* duplicated = entity_get(sim, duplicated_id);
@@ -278,8 +271,7 @@ b8 serialize_entity(Serializer* s, Entity* entity)
     u32 version = 0;
     {
         const EntityTypeData* data = entity_type_get(entity->type);
-        if (data)
-            version = data->version;
+        if (data) version = data->version;
     }
     
     serialize_u32(s, version);
@@ -365,7 +357,7 @@ void entity_power_id(Simulation* sim, u32 id, Entity* source, b8 power)
 
 Entity* entity_get(Simulation* sim, u64 id)
 {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     return sys->entities[id];
 }
 
@@ -419,7 +411,7 @@ void entity_set_rotation(Simulation* sim, Entity* entity, f32 rotation)
 
 Array<Entity*> entity_get_area(Arena* arena, Simulation* sim, v2 position, v2 size, EntityFilterFn* filter, const void* data)
 {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     Array<u64> res0 = sparse_map_get_area(arena, &sys->sparse_map, position, size, (SparseMapFilterFn*)filter, data);
     Array<Entity*> res = { (Entity**)res0.data, res0.count };
     static_assert(sizeof(Entity*) == sizeof(u64));
@@ -430,7 +422,7 @@ void entity_add_flags(Simulation* sim, Entity* entity, u64 flags)
 {
     if (entity == NULL) return;
     
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     
     if (flags & EntityFlag_DestroyRequest) sys->destroy_request = TRUE;
     entity->flags |= flags;
@@ -521,12 +513,12 @@ void entity_on_collision(Simulation* sim, CollisionData data)
 }
 
 u32 get_entity_count(Simulation* sim) {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     return sys->entity_count;
 }
 
 HashTable<Entity>* entity_table_get(Simulation* sim) {
-    SV_ENTITY_SYSTEM_DEF();
+    ENTITY_SYSTEM_DEF();
     return &sys->entities;
 }
 
@@ -542,7 +534,7 @@ EntityTypeIterator entity_type_iterator_begin(Simulation* sim, u64 type)
     return it;
 }
 
-//////////////////////////////// TIMING ////////////////////////////////
+//- Timing 
 
 f32 get_simulation_speed(Simulation* sim)
 {
@@ -659,9 +651,9 @@ v2 simulate_entity_position(Simulation* sim, Entity* entity, v2* out_velocity)
     return entity->position + velocity * time;
 }
 
-//////////////////////////////// CAMERA ////////////////////////////////
+//- Camera 
 
-static void set_camera_state(Simulation* sim, CameraState state, f32 duration)
+internal_fn void set_camera_state(Simulation* sim, CameraState state, f32 duration)
 {
     sim->camera_state = state;
     
@@ -678,7 +670,7 @@ static void set_camera_state(Simulation* sim, CameraState state, f32 duration)
     sim->camera_transition_started_tick = sim->tick;
 }
 
-static CameraZoom get_zoom_at(Simulation* sim, v2 pos) {
+internal_fn CameraZoom get_zoom_at(Simulation* sim, v2 pos) {
     return sim->camera_zoom_base;
 }
 
@@ -711,7 +703,7 @@ void simulation_update_matrices(Simulation* sim)
     camera->projection_matrix = m4_projection_orthographic(size.x * 0.5f, -size.x * 0.5f, size.y * 0.5f, -size.y * 0.5f, -100.f, 100.f);
 }
 
-static b8 camera_focus_with_velocity_entity_filter(Entity* entity, const void* data)
+internal_fn b8 camera_focus_with_velocity_entity_filter(Entity* entity, const void* data)
 {
     if (entity->type == ENTITY_TYPE_PLAYER) return FALSE;
     
@@ -726,7 +718,7 @@ static b8 camera_focus_with_velocity_entity_filter(Entity* entity, const void* d
     return TRUE;
 }
 
-static Entity* get_current_gear(Simulation* sim, Entity* player)
+internal_fn Entity* get_current_gear(Simulation* sim, Entity* player)
 {
     SV_PROFILE();
     
@@ -745,7 +737,7 @@ static Entity* get_current_gear(Simulation* sim, Entity* player)
     return NULL;
 }
 
-static void set_camera_state_on_player_death(Simulation* sim)
+internal_fn void set_camera_state_on_player_death(Simulation* sim)
 {
     if (sim->state == SimulationState_Success) {
         set_camera_state(sim, CameraState_TargetExplosion, 0.5f);
@@ -892,7 +884,7 @@ void simulation_update_camera(Simulation* sim, f32 dt)
     camera->size = size;
 }
 
-//////////////////////////////// COUNTDOWN ////////////////////////////////
+//- Countdown
 
 #define COUNTDOWN_ENDING_ID 0x6969831FFAA
 
@@ -966,7 +958,7 @@ u32 countdown_calculate_remaining_ticks(Simulation* sim)
     return ticks;
 }
 
-static b8 get_countdown_trigger(Simulation* sim, u32 power_id, u32 unpower_id, v4* out_bounds, f32* out_rotation, v2* out_right)
+internal_fn b8 get_countdown_trigger(Simulation* sim, u32 power_id, u32 unpower_id, v4* out_bounds, f32* out_rotation, v2* out_right)
 {
     foreach_entity(sim, it)
     {
@@ -1093,7 +1085,7 @@ void countdown_update(Simulation* sim)
     }
 }
 
-//////////////////////////////// TARGET EXPLOSION ////////////////////////////////
+//- Target Explosion
 
 void play_target_explosion(Simulation* sim)
 {
@@ -1189,7 +1181,7 @@ b8 sample_shock_wave(Simulation* sim, v2 point)
     return distance < wave;
 }
 
-//////////////////////////////// MISC ////////////////////////////////
+//- Misc
 
 v2_u32 calculate_current_power_ids(Simulation* sim)
 {
@@ -1393,7 +1385,7 @@ void simulation_destroy(Simulation* sim)
     arena_free(sim->arena);
 }
 
-static u64 find_throw_hook_entity_and_adjust_position(Simulation* sim, PlayerEvent* event)
+internal_fn u64 find_throw_hook_entity_and_adjust_position(Simulation* sim, PlayerEvent* event)
 {
     SCRATCH();
     assert(event->type == PlayerEventType_ThrowHook);
@@ -1614,32 +1606,42 @@ void simulation_update(Simulation* sim, OS_Input* input, f32 dt)
     
     dt *= get_simulation_speed(sim);
     
-    player_controller_update(sim, &sim->player_controller, input);
-    
-    if (simulation_started(sim) && !sim->paused)
+    if (!sim->paused)
     {
-        if (sim->state == SimulationState_Waiting || sim->state == SimulationState_Playing || sim->state == SimulationState_Death)
-            game->capture_cursor = TRUE;
+        player_controller_update(sim, &sim->player_controller, input);
         
-        sim->tick_timer += dt;
-        
-        b8 first = TRUE;
-        
-        while (sim->tick_timer >= sim->delta_time)
+        if (simulation_started(sim))
         {
-            sim->tick_timer -= sim->delta_time;
+            if (sim->state == SimulationState_Waiting || sim->state == SimulationState_Playing || sim->state == SimulationState_Death)
+                game->capture_cursor = TRUE;
             
-            b8 last = sim->tick_timer < sim->delta_time;
-            simulation_advance(sim, first, last);
+            sim->tick_timer += dt;
+            sim->last_delta_time = 0.f;
             
-            first = FALSE;
+            b8 first = TRUE;
+            
+            while (sim->tick_timer >= sim->delta_time)
+            {
+                sim->tick_timer -= sim->delta_time;
+                
+                sim->last_delta_time += sim->delta_time;
+                
+                b8 last = sim->tick_timer < sim->delta_time;
+                simulation_advance(sim, first, last);
+                
+                first = FALSE;
+            }
+            
+            simulation_update_camera(sim, dt);
+            camera_update(&sim->camera, dt);
         }
         
-        simulation_update_camera(sim, dt);
-        camera_update(&sim->camera, dt);
+        player_controller_late_update(sim, &sim->player_controller);
     }
-    
-    player_controller_late_update(sim, &sim->player_controller);
+    else
+    {
+        player_controller_update_paused(sim, &sim->player_controller, input);
+    }
 }
 
 void serialize_simulation(Serializer* s, Simulation* sim)
@@ -1999,7 +2001,7 @@ b8 is_gravity_sided(Simulation* sim)
     return FALSE;
 }
 
-static void draw_district3_clouds(Simulation* sim, v4 bounds)
+internal_fn void draw_district3_clouds(Simulation* sim, v4 bounds)
 {
     v2 pos = bounds_coord(bounds);
     v2 size = bounds_size(bounds);
@@ -2076,7 +2078,7 @@ static void draw_district3_clouds(Simulation* sim, v4 bounds)
     }
 }
 
-static v4 draw_background(Simulation* sim)
+internal_fn v4 draw_background(Simulation* sim)
 {
     SV_PROFILE();
     
@@ -2167,7 +2169,7 @@ static v4 draw_background(Simulation* sim)
     return bounds;
 }
 
-static void draw_editor_grid(Simulation* sim)
+internal_fn void draw_editor_grid(Simulation* sim)
 {
     SV_PROFILE();
     CommandList cmd = game->cmd;
@@ -2253,7 +2255,7 @@ static void draw_editor_grid(Simulation* sim)
     imrend_end(cmd);
 }
 
-static void draw_chain(Simulation* sim)
+internal_fn void draw_chain(Simulation* sim)
 {
     SV_PROFILE();
     
@@ -2495,7 +2497,7 @@ static void draw_chain(Simulation* sim)
     renderer_batch_draw();
 }
 
-static void draw_hook_preview(Simulation* sim)
+internal_fn void draw_hook_preview(Simulation* sim)
 {
     SV_PROFILE();
     
@@ -2593,7 +2595,7 @@ static void draw_hook_preview(Simulation* sim)
     renderer_batch_draw();
 }
 
-static void draw_gravity_animation(Simulation* sim)
+internal_fn void draw_gravity_animation(Simulation* sim)
 {
     SV_PROFILE();
     
@@ -2726,7 +2728,9 @@ void draw_gamepad_hook_preview(Simulation* sim)
     Camera* camera = &sim->camera;
     Entity* player = entity_get(sim, sim->player);
     
-    if (player == NULL || player->grappling->active) return;
+    if (player == NULL) return;
+    
+    if (player->grappling->active) return;
     
     v2 direction = sim->player_controller.look_direction;
     v2 cursor = sim->player_controller.look_cursor;
@@ -2757,7 +2761,7 @@ void draw_gamepad_hook_preview(Simulation* sim)
     }
     
     Color color = COLOR_CYAN;
-    color.a = 100;
+    color.a = 0.5f;
     
     v2 p = player->position;
     f32 step_length = 0.5f;
@@ -2840,7 +2844,7 @@ void simulation_draw(Simulation* sim)
         imrend_begin(sim, cmd);
         
         // TEMP
-        if (sim->hook_preview.valid)
+        if (sim->hook_preview.valid && 0)
         {
             Entity* player = entity_get(sim, sim->player);
             assert(player);
