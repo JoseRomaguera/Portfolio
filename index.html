@@ -1,108 +1,60 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jose Romaguera</title>
-    <link rel="stylesheet" href="common_style.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Sección Sobre Mí -->
-        <section class="about section">
-            <div class="profile">
-                <img src="perfil.png" alt="perfil" class="profile-img">
-                <h1 class="name">Jose Romaguera</h1>
-            </div>
-
+    <header>
+        <h1>Jose Romaguera</h1>
+        <p>
+            My name is Jose Romaguera, from Valencia, Spain.<br>
+            I'm a programmer specialized in low-level systems, game engines, and real-time applications.<br><br>
+            As a professional developer, my job is to deeply understand the problems I'm solving to provide simple, reliable, high-quality, and high-performance solutions.<br>
+            I've been programming since 2017, starting as a self-taught developer, always passionate about low-level programming and building Game Engines from scratch.
             <br>
+            <a class="more_about_me" href="about/about.html">More about me</a>
+        </p>
+    </header>
+    <section>
+        <h2>Corporate Projects</h2>
 
-            <h2>About Me</h2>
-            <p class="desc-text">
-                My name is Jose Romaguera, from Valencia, Spain.<br>
-                I'm a programmer specialized in <b>videogames</b> and <b>real-time applications</b>.<br><br>
-                As a professional developer, my job is to deeply understand the problems I'm solving to provide 
-                <b>simple</b>, <b>reliable</b>, <b>high-quality</b> and <b>high-performance</b> solutions.
-                I've been programming since 2017, starting as a self-taught developer, always passionate about low-level programming and building <b>Game Engines</b> from scratch.
+        <div class="content">
+            <ul class="button">
+                <li class="button"><a href="soul_breach.html">Soul Breach — 2D Game — Cosmic Spell</a></li>
+                <li class="button"><a href="coding_day.html">Coding Day — 2D Game — Dreamlight Games</a></li>
+            </ul>
+        </div>
+        <h2>Independent Commercial Projects</h2>
+        <div class="content">
+            <ul class="button">
+                <li class="button"><a href="https://github.com/JoseRomaguera/Yov-Lang" target="_blank">Yov Programming Language</a></li>
+                <li class="button"><a href="glimmer_chain.html">Glimmer Chain — 2D Game</a></li>
+                <li class="button"><a href="silver_engine.html">Silver Engine — 2D and 3D Game Engine</a></li>
+            </ul>
+        </div>
+        <h2>Independent Hobby Projects</h2>
+        <div class="content">
+            <ul class="button">
+                <li class="button"><a href="voxel_game.html">Voxel Game — Multiplayer 3D Game</a></li>
+                <li class="button"><a href="https://github.com/JoseRomaguera/8086-Simulator" target="_blank">8086 CPU Simulator</a></li>
+            </ul>
+        </div>
 
+        <h2>Contact</h2>
+        <div class="content">
+            <p>
+                Email: joselrm890@gmail.com<br>
+                Phone: +34 633040115<br>
+                <a href="https://www.youtube.com/@JoseRomagueraM" target="_blank">YouTube</a><br>
+                <a href="https://www.linkedin.com/in/jose-romaguera-montero-a2a8a9201" target="_blank">LinkedIn</a><br>
+                <a href="https://github.com/JoseRomaguera" target="_blank">GitHub</a><br>
             </p>
+        </div>
 
-            <br>
-            <a href="about/about.html">
-                <p class="desc-text">More about me</p>
-            </a>
-        </section>
-
-
-        <section class="projects section">
-            <h2>Projects</h2>
-            <div class="projects-column">
-                <div class="project">
-                    <a href="glimmer_chain/glimmer_chain_project.html">
-                        <img src="glimmer_chain/preview.png" alt="Glimmer Chain">
-                        <div class="overlay">
-                            <h3>Glimmer Chain</h3>
-                        </div>
-                    </a>
-                </div>
-                <div class="project">
-                    <a href="soul_breach/soul_breach_project.html">
-                        <img src="soul_breach/preview.png" alt="Soul Breach">
-                        <div class="overlay">
-                            <h3>Soul Breach</h3>
-                        </div>
-                    </a>
-                </div>
-                <div class="project">
-                    <a href="coding_day/coding_day_project.html">
-                        <img src="coding_day/preview.png" alt="Coding Day">
-                        <div class="overlay">
-                            <h3>Coding Day</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="projects section">
-            <h2>Hobby Projects</h2>
-            <div class="projects-column">
-                <div class="project">
-                    <a href="voxel_game/voxel_project.html">
-                        <img src="voxel_game/preview.png" alt="preview">
-                        <div class="overlay">
-                            <h3>Voxel Game</h3>
-                        </div>
-                    </a>
-                </div>
-                <div class="project">
-                    <a href="silver_engine/silver_engine_project.html">
-                        <img src="silver_engine/preview.png" alt="preview">
-                        <div class="overlay">
-                            <h3>Silver Engine</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="contact section">
-            <h2>Contact</h2>
-
-            <div class="icon-container">
-                <a href="mailto:joselrm890@gmail.com" class="icon">
-                    <img src="contact/email_icon.png" alt="Email">
-                </a>
-                <a href="https://www.youtube.com/@JoseRomagueraM" class="icon">
-                    <img src="contact/youtube_icon.png" alt="YouTube">
-                </a>
-                <a href="https://www.linkedin.com/in/jose-romaguera-montero-a2a8a9201" class="icon">
-                    <img src="contact/linkedin_icon.png" alt="Linkedin">
-                </a>
-            </div>
-        </section>
-    </div>
+    </section>
 
     <footer>
         <p>© 2024 Jose Romaguera. All rights reserved.</p>

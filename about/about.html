@@ -1,140 +1,156 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jose Romaguera</title>
-    <link rel="stylesheet" href="../common_style.css">
-    <link rel="stylesheet" href="about_style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Sección del Proyecto -->
-        <section class="project-section section">
-            
-            <div class="project-description">
-                <h1>About Me</h1>
+    <header>
+        <h1>About Me</h1>
+    </header>
+    <section>
 
-                <h3>Biography and Education</h3>
-                
-                <ul class="desc-text">
-                    <li>I was born in Algemesí, Spain, on April 20, 2001.</li>
-                    <li>I studied at Colegio Santa Ana in Algemesí and completed my compulsory secondary education (ESO) in 2017.</li>
-                    <li>From 2017 to 2019, I attended IES Bernat Guinovart for my high school diploma (Bachillerato), where I started learning programming on my own in 2017.</li>
-                    <li>In 2020, I took a gap year to focus on self-learning through online courses and personal projects (just as the pandemic hit). During this time, I developed my first 3D game engine in C++.</li>
-                    <li>From 2020 to 2022, I completed a Higher National Diploma in Multiplatform Application Development at IES Consuelo Aranda in Alberic.</li>
-                    <li>I began my internship at <a href="../soul_breach/soul_breach_project.html">Cosmic Spell</a> in 2022, working on the development of Soul Breach, and I have remained employed there ever since.</li>
-                    <li>In my free time, I have continued to expand my knowledge and have developed multiple personal projects, such as:
-                        <a href="../glimmer_chain/glimmer_chain_project.html">Glimmer Chain</a>,
-                        <a href="../voxel_game/voxel_project.html">Voxel Game</a> and
-                        <a href="../silver_engine/silver_engine_project.html">Silver Engine</a>
-                    </li>
-                </ul>
+        <h2>Who I am</h2>
 
-                <h3>Skills</h3>
+        <div class="content">
+            <p>
+                I see myself as a man committed to living a meaningful life. My goal is to pursue what I love while staying close to and caring for my loved ones.
+                <br><br>
+                I am a naturally curious and ambitious person. From the moment I started programming, I felt a deep need to understand computers from the ground up. I steer away from hedonistic behaviors and strive to ensure that my actions contribute value to society.
+                <br><br>
+                In the long run, I aim to work and study to achieve greater freedom and independence. Ever since I was 16, I’ve jokingly said that I plan to retire by the age of 30, but beneath the humor lies a strong determination to shape my own path.
+            </p>
+        </div>
 
-                <p class="desc-text">Programming Roles:</p>
-                <ul class="desc-text">
-                    <li>Tools</li>
-                    <li>Systems</li>
-                    <li>Low-Level</li>
-                    <li>Performance</li>
-                    <li>Gameplay</li>
-                    <li>UI</li>
-                </ul>
+        <h2>Biography and Education</h2>
 
-                <p class="desc-text">Programming Languages:</p>
-                <ul class="desc-text">
-                    <li>C++: Used extensively in most of my personal projects.</li>
-                    <li>C: Occasionally used in some personal projects.</li>
-                    <li>C#: Used in Soul Breach with Unity.</li>
-                    <li>Java: Initially used in personal projects and during my studies.</li>
-                    <li>Python: Used during my studies and for some small personal projects.</li>
-                    <li>Shader Languages: HLSL and GLSL</li>
-                </ul>
+        <div class="content">            
+            <ul>
+                <li>I was born in Algemesí, Spain, on April 20, 2001.</li>
+                <li>I studied at Colegio Santa Ana in Algemesí and completed my compulsory secondary education (ESO) in 2017.</li>
+                <li>From 2017 to 2019, I attended IES Bernat Guinovart for my high school diploma (Bachillerato), where I started learning programming on my own in 2017.</li>
+                <li>In 2020, I took a gap year to focus on self-learning through online courses and personal projects (just as the pandemic hit). During this time, I developed my first 3D game engine in C++.</li>
+                <li>From 2020 to 2022, I completed a Higher National Diploma in Multiplatform Application Development at IES Consuelo Aranda in Alberic.</li>
+                <li>I began my internship at <a href="../soul_breach.html">Cosmic Spell</a> in 2022, working on the development of Soul Breach, and I have remained employed there ever since.</li>
+                <li>In my free time, I have continued to expand my knowledge and have developed multiple personal projects, such as:
+                    <a href="../glimmer_chain.html">Glimmer Chain</a>,
+                    <a href="../voxel_game.html">Voxel Game</a> and
+                    <a href="../silver_engine.html">Silver Engine</a>
+                </li>
+            </ul>
+        </div>
+        <!--
+        <h2>Skills</h2>
 
-                <p class="desc-text">"From Scratch" Systems:</p>
-                <ul class="desc-text">
-                    <li>Immediate Mode UI</li>
-                    <li>Sound Engines</li>
-                    <li>Basic Physics Engines</li>
-                    <li>Entity Component Systems (ECS)</li>
-                    <li>Particle Systems</li>
-                    <li>Network Protocols</li>
-                </ul>
+        <div class="content">
+            <p>Programming Roles:</p>
+            <ul>
+                <li>Low-Level</li>
+                <li>Systems</li>
+                <li>Tools</li>
+                <li>Graphics</li>
+                <li>Performance</li>
+                <li>Gameplay</li>
+                <li>UI</li>
+            </ul>
 
-                <p class="desc-text">Rendering Techniques:</p>
-                <ul class="desc-text">
-                    <li>3D Mesh Projection</li>
-                    <li>Forward & Deferred Rendering</li>
-                    <li>Batch Rendering (commonly used in 2D)</li>
-                    <li>SSAO (Screen Space Ambient Occlusion)</li>
-                    <li>Bloom Effect</li>
-                    <li>Gaussian Blur</li>
-                    <li>Cascaded Shadow Mapping</li>
-                    <li>Ray Marching</li>
-                    <li>Skeletal Animations</li>
-                    <li>Font Rasterization</li>
-                </ul>
+            <p>Programming Languages:</p>
+            <ul>
+                <li>C++: Used extensively in most of my personal projects.</li>
+                <li>C: Occasionally used in some personal projects.</li>
+                <li>C#: Used in Soul Breach with Unity.</li>
+                <li>Java: Initially used in personal projects and during my studies.</li>
+                <li>Python: Used during my studies and for some small personal projects.</li>
+                <li>Shader Languages: HLSL and GLSL</li>
+            </ul>
 
-                <p class="desc-text">Other Programming Skills:</p>
-                <ul class="desc-text">
-                    <li>Graphics APIs: OpenGL, Vulkan & DirectX11.</li>
-                    <li>Multithreading</li>
-                    <li>Custom Memory Allocators</li>
-                    <li>Data Structures</li>
-                    <li>WinAPI Library</li>
-                    <li>Procedural Generation</li>
-                    <li>Path Finding</li>
-                </ul>
+            <p>"From Scratch" Systems:</p>
+            <ul>
+                <li>Immediate Mode UI</li>
+                <li>Sound Engines</li>
+                <li>Basic Physics Engines</li>
+                <li>Entity Component Systems (ECS)</li>
+                <li>Particle Systems</li>
+                <li>Network Protocols</li>
+            </ul>
 
-                <h3>Programming Philosophy</h3>
+            <p>Rendering Techniques:</p>
+            <ul>
+                <li>3D Mesh Projection</li>
+                <li>Forward & Deferred Rendering</li>
+                <li>Batch Rendering (commonly used in 2D)</li>
+                <li>SSAO (Screen Space Ambient Occlusion)</li>
+                <li>Bloom Effect</li>
+                <li>Gaussian Blur</li>
+                <li>Cascaded Shadow Mapping</li>
+                <li>Ray Marching</li>
+                <li>Skeletal Animations</li>
+                <li>Font Rasterization</li>
+            </ul>
 
-                <p class="desc-text">
-                    In 2020, while developing Silver Engine, I began to move away from Object-Oriented Programming (OOP) and adopted a more procedural approach. 
-                    This shift allowed me to grow significantly as a programmer. My perspective was deeply influenced by developers like Casey Muratori and Jonathan Blow, 
-                    who have become key references for me.
-                    <br><br>
-                    I focus on fundamental programming principles and strive to write the simplest code possible. 
-                    I firmly believe that SOLID principles and the "Clean Code" approach advocated by Robert C. Martin have, in many cases, done more harm than good.
-                    My philosophy is: No OOP, no UML, no garbage collectors, no interpreted languages—just simple, straightforward, reliable, and high-performance software.
-                    <br><br>
-                    Although I primarily work with C++, which is known for being object-oriented, I restrict myself to using only functions and data structures. This approach makes memory management and program flow more coherent and explicit.
-                    <br><br>
-                    Despite my skepticism about OOP, I have successfully adapted to the development style of 
-                    <a href="../soul_breach/soul_breach_project.html">Soul Breach</a>, where we use C# and object-oriented programming.
-                </p>
+            <p>Other Programming Skills:</p>
+            <ul>
+                <li>Graphics APIs: OpenGL, Vulkan & DirectX11.</li>
+                <li>Multithreading</li>
+                <li>Custom Memory Allocators</li>
+                <li>Data Structures</li>
+                <li>WinAPI Library</li>
+                <li>Procedural Generation</li>
+                <li>Path Finding</li>
+            </ul>
+        </div>
+        -->
 
-                <h3>Electronics</h3>
+        <h2>Programming Philosophy</h2>
 
-                <p class="desc-text">
-                    In 2023, I developed an interest in electronics as a hobby and built a remote-controlled car.
-                    <br>
-                </p>
+        <div class="content">
+            <p>
+                In 2020, while developing Silver Engine, I began to move away from Object-Oriented Programming (OOP) and adopted a more procedural approach. 
+                This shift allowed me to grow significantly as a programmer. My perspective was deeply influenced by developers like Casey Muratori and Jonathan Blow, 
+                who have become key references for me.
+                <br><br>
+                I focus on fundamental programming principles and strive to write the simplest code possible. 
+                I firmly believe that SOLID principles and the "Clean Code" approach advocated by Robert C. Martin have, in many cases, done more harm than good.
+                My philosophy is: No OOP, no UML, no garbage collectors, no interpreted languages—just simple, straightforward, reliable, and high-performance software.
+                <br><br>
+                Although I primarily work with C++, which is known for being object-oriented, I restrict myself to using only functions and data structures. This approach makes memory management and program flow more coherent and explicit.
+                <br><br>
+                Despite my skepticism about OOP, I have successfully adapted to the development style of 
+                <a href="../soul_breach.html">Soul Breach</a>, where we use C# and object-oriented programming.
+            </p>
+        </div>
 
-                <video class="screenshot" controls>
-                    <source src="car.mp4" type="video/mp4">
-                </video>
-                
-                <p class="desc-text">I am currently working on building a drone:</p>
-                
-                <img class="screenshot" src="drone.jpg">
+        <h2>Electronics</h2>
 
-                <h3>Sports</h3>
-                <p class="desc-text">
-                    Since I was 15, I've been passionate about calisthenics. I've always believed it's worth investing time every day to stay
-                    active and improve physical abilities.<br>
-                    I was also a member of a calisthenics club called Silver Barzz, a group of friends who traveled across Spain to connect with others who shared our passion for the sport.
-                </p>
+        <div class="content">
+            <p>
+                In 2023, I developed an interest in electronics as a hobby and built a remote-controlled car.
+                <br>
+            </p>
+            <video class="screenshot" controls> <source src="car.mp4" type="video/mp4"> </video>
 
-                <img class="screenshot" src="calistenia.GIF">
-            </div>
-        
-        </section>
-    </div>
+            <p>I am currently working on building a drone:</p>
+
+            <img class="screenshot" src="drone.jpg">
+        </div>
+
+        <h2>Sports</h2>
+        <div class="content">
+            <p>
+                Since I was 15, I've been passionate about calisthenics. I've always believed it's worth investing time every day to stay
+                active and improve physical abilities.<br>
+                I was also a member of a calisthenics club called Silver Barzz, a group of friends who traveled across Spain to connect with others who shared our passion for the sport.
+            </p>
+
+            <img class="screenshot" src="calistenia.GIF">
+        </div>
+
+    </section>
 
     <footer>
-        <p>© 2024 Jose Romaguera. Todos los derechos reservados.</p>
+        <p>© 2024 Jose Romaguera. All rights reserved.</p>
     </footer>
 </body>
 </html>
