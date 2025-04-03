@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jose Romaguera</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Glimmer Chain</h1>
+        <div class="video"><iframe src="https://www.youtube.com/embed/EX8CxCW_xIg" frameborder="0" allowfullscreen></iframe></div>
+    </header>
+    <section>
+        <h2>What is Glimmer Chain?</h2>
+
+        <div class="content">
+            <p>
+                Glimmer Chain is a skill-based 2D platformer where you control a robot powered by a hook and chain.
+                Jump and use the chain to complete levels.
+            </p>
+        </div>
+    
+        <div class="content">
+            <p>
+                The project started in June 2022 and was released on April 9, 2024.
+                It was developed using a custom engine that I built from scratch in C++, and the team consisted of three people: an artist, a composer and myself.
+            </p>
+        </div>
+
+        <h2>My Contribution</h2>
+
+        <div class="content">
+            <p>
+                I had the following roles in the development:<br>
+            </p>
+
+            <ul>
+                <li>Gameplay programmer.</li>
+                <li>Programmer of the entire game engine</li>
+                <li>Programmer of the level editor and development tools.</li>
+                <li>Team lead: Managing the work of the artist and the composer.</li>
+                <li>Game designer.</li>
+                <li>Created all the sound effects.</li>
+            </ul>
+
+            <p>
+                I'm also the owner and handled all the marketing, although that wasn't part of the development process.
+            </p>
+        </div>
+
+        <h2>More About Glimmer Chain</h2>
+
+        <div class="content">            
+            <ul>
+                <li><a href="#why_custom_engine">Why Create A Custom Engine?</a></li>
+                <li><a href="#dev_details">Development Details</a></li>
+                <ul>
+                    <li><a href="#physics">Physics Engine</a></li>
+                    <li><a href="#ranking">Global Ranking</a></li>
+                    <li><a href="#framerate_rendering">Frame Rate Independent Rendering</a></li>
+                    <!-- IDEAS:
+                    Sound Engine
+                    Entity System
+                    From Scratch UI
+                    Level Editor
+                    Assets System
+                    Frame inspection using RenderDoc
+                    Platform Layer
+                    -->
+                </ul>
+                <li><a href="#team">The Team</a></li>
+                <li><a href="#community">Community</a></li>
+                <ul>
+                    <li><a href="#indie_dev_day">Indie Dev Day</a></li>
+                    <li><a href="#world_records">World Records</a></li>
+                </ul>
+                <li><a href="#links">Links</a></li>
+            </ul>
+        </div>
+
+        <h2 id="why_custom_engine">Why Create A Custom Engine?</h2>
+
+        <div class="content">
+        <p>
+                People often ask me: Why didn't you use an existing game engine?<br>
+                Part of it is because I really enjoy it and wanted to have a finished and polished product made from scratch in my Portfolio. I wanted to face all the 
+                challenges head-on and learn from them to be better prepared for larger projects in the future.<br><br>
+                There are also practical reasons:
+                <ul>
+                    <li>Full control over what the user's computer is running and how memory is managed.</li>
+                    <li>The tools and engine adapt to the project, rather than the other way around.</li>
+                    <li>For a simple game, you don't need many of the features other engines provide.</li>
+                    <li>Most of the core features are reusable for other projects.</li>
+                    <li>No licensing issues.</li>
+                </ul>
+            </p>
+        </div>
+
+        <h2 id="dev_details">Development Details</h2>
+
+        <h2 id="physics">Physics Engine</h2>
+
+        <div class="content">
+            <p>
+                In a physics-based game, where smooth and responsive gameplay relies entirely on physics,
+                having full control is crucial. That's why I developed my own physics engine.<br><br>
+
+                To ensure consistency across players, I've implemented a fixed physics frame rate of 120 updates per second.
+                Additionally, since the <a href="#ranking">ranking</a> requires a fully deterministic simulation, this approach guarantees reproducible results.<br><br>
+
+                The only dynamic entity in the scene is the player, who has a rectangular collider and a rotation determined by velocity. 
+                This necessitated oriented collision detection and resolution, though kinetic energy calculations were not required.<br>
+            </p>
+        </div>
+
+        <div class="video"><iframe src="https://www.youtube.com/embed/nsZl25dwLZ8?si=AvamyHFTIOgAhDTt" frameborder="0" allowfullscreen></iframe></div>
+            
+        <div class="content">
+            <h3>Grappling Mechanic</h3>
+            
+            <p>
+                A fully realistic swinging simulation isn't necessary—in fact, it would hinder smooth gameplay.
+                Instead, the grappling mechanic is divided into two distinct components: swinging and bending.<br><br>
+
+                <b>Swinging</b>: When the distance between the hook point and the player exceeds the rope length, all forces acting parallel to the rope
+                are canceled. To enable movement, a force is applied perpendicular to the rope.<br>
+
+                <b>Bending</b>: This is more complex. Each physics update performs a raycast, and if a collision is detected, the hook point is adjusted
+                to the nearest corner. To undo bending, the system tracks the angle and rotation direction (clockwise or counterclockwise).
+                A threshold mechanism ensures that if the player swings past a certain limit, the hook point resets to the previous position.<br>
+            </p>
+        </div>
+        
+        <div class="video"><iframe src="https://www.youtube.com/embed/msIMFSHL7fs?si=JvlrIQqr2VhlPckJ" frameborder="0" allowfullscreen></iframe></div>
+        <div class="content">
+            <p>
+                <br>
+                The robot is the only dynamic entity, except for the particles in the ending animation.
+            </p>
+        </div>
+
+        <div class="video"><iframe src="https://www.youtube.com/embed/H2duqqqBRt4?si=Zjy5XE1tw-Eqsd_w" frameborder="0" allowfullscreen></iframe></div>
+
+        <h2 id="ranking">Global Ranking</h2>
+
+        <div class="content">
+            <p>
+                In Glimmer Chain, you can replay your records for every level, but there's also a global
+                ranking where players compete for the top positions and can watch each other's runs.<br><br>
+
+                Recording every play as a video would be impractical, so instead, the game stores user input and uses
+                 it to reproduce the exact same replay every time. This requires the simulation to be completely deterministic,
+                 meaning that <a href="#physics">physics</a> and gameplay mechanics must always behave the same way and run at a fixed update rate.<br><br>
+
+                The game uses SteamAPI to manage the leaderboards, but Steam imposes a 256-byte limit on custom leaderboard entry data. 
+                To work around this, I developed a custom compression algorithm that converts an array of user actions into a compact buffer.<br><br>
+
+                This system only fails if the compressed data still exceeds 256 bytes, but this is a rare scenario.
+                I find it fascinating how, within such a small space, it's possible to store enough information to 
+                perfectly replicate a human's entire playthrough of Glimmer Chain.
+            </p>
+        </div>
+
+        <div class="video"><iframe src="https://www.youtube.com/embed/BnCKdn4ZnXs?si=wOBepilXrO2oloB3" frameborder="0" allowfullscreen></iframe></div>
+
+        <h2 id="framerate_rendering">Frame Rate Independent Rendering</h2>
+        
+        <div class="content">
+            <p>
+                As I explained before, Glimmer Chain's simulation updates at a fixed rate 
+                of 120 times per second, while rendering remains frame rate independent.<br><br>
+
+                For lower frame rates, there's not much that can be done—latency naturally increases
+                as the frame rate drops. However, for higher frame rates (or when the simulation runs
+                in slow motion for debugging purposes, such as in the video), 
+                the rendering system uses the latest simulation data and, based on the elapsed time, predicts the player's position.<br><br>
+
+                This technique creates a smoother visual effect, reducing perceived latency and giving players a more responsive experience.<br><br>
+
+                The video illustrates this effect: the player moves smoothly, while the green collider,
+                which follows the fixed frame rate, appears to "pop" due to lack of interpolation.
+            </p>
+        </div>
+
+        <div class="video"><iframe src="https://www.youtube.com/embed/gFmBNGi-nFY?si=qp1n9uBwRQH9k4XP" frameborder="0" allowfullscreen></iframe></div>
+
+        <h2 id="team">The Team</h2>
+
+        <div class="content">
+            <img class="screenshot" src="credits.png">
+        </div>
+
+        <h2 id="community">Community</h2>
+
+        <h2 id="indie_dev_day">Indie Dev Day</h2>
+
+        <div class="content">
+            <p>
+                Glimmer Chain was showcased at IndieDevDay 2024 in Barcelona, where I had the incredible
+                opportunity to watch people play live. Seeing their reactions in real time was an amazing
+                experience and a huge source of motivation for me.
+            </p>
+            <img class="screenshot" src="indieDevDay.png">
+        </div>
+
+        <h2 id="world_records">World Records</h2>
+
+        <div class="content">
+            <p>
+                A few dedicated Glimmer Chain players engaged in an intense competition for the top spots in the rankings.<br>
+                After an update that improved the camera, one of them went on a streak, 
+                breaking 92% of the world records and even posted a video of his performance on YouTube!
+            </p>
+        </div>
+
+        <div class="video"><iframe src="https://www.youtube.com/embed/taPsj5TyxbY?si=GtkRw5IqhZQSLtYB" frameborder="0" allowfullscreen></iframe></div>
+
+        <h2 id="links">Links</h2>
+        <ul>
+            <p>Code Sample: <a target="_blank" href="https://github.com/JoseRomaguera/Portfolio/blob/main/glimmer_chain_sample.cpp">simulation.cpp</a></p>
+            <p>Steam Page: <a target="_blank" href="https://store.steampowered.com/app/2286720/Glimmer_Chain/">https://store.steampowered.com/app/2286720/Glimmer_Chain/</a></p>
+        </ul>
+
+    </section>
+
+    <footer>
+        <p>© 2024 Jose Romaguera. All rights reserved.</p>
+    </footer>
+</body>
