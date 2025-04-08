@@ -31,17 +31,34 @@ a {
     color: #1e90ff;
 }
 h2 {
-    font-size: 2em;
-    margin-bottom: 20px;
-    
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #555;
+    padding-bottom: 5px;
 }
 h3 {
-    font-size: 1.5em;
+    font-size: 23px;
     margin-bottom: 20px;
 }
 p, li {
     font-size: 20px;
     line-height: 1.5;
+}
+.code {
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    font-size: 14px;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.5;
+    margin: 1em 0;
 }
 footer, footer p {
     font-size: 12px;

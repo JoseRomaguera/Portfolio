@@ -59,6 +59,8 @@
                     <li><a href="#physics">Physics Engine</a></li>
                     <li><a href="#ranking">Global Ranking</a></li>
                     <li><a href="#framerate_rendering">Frame Rate Independent Rendering</a></li>
+                    <li><a href="#imm_rendering">Immediate Mode Rendering</a></li>
+                    <li><a href="#imm_particles">Immediate Mode Particles</a></li>
                     <!-- IDEAS:
                     Sound Engine
                     Entity System
@@ -184,6 +186,134 @@
         </div>
 
         <div class="video"><iframe src="https://www.youtube.com/embed/gFmBNGi-nFY?si=qp1n9uBwRQH9k4XP" frameborder="0" allowfullscreen></iframe></div>
+
+        <h2 id="imm_rendering">Immediate Mode Rendering</h2>
+
+        <div class="content">
+            <p>
+                In the game industry, retained mode systems dominate. If you're used to working with third-party 
+                game engines like Unity, Unreal, or Godot, the concept of immediate mode might seem almost 
+                magical—or even impractical from a performance standpoint.<br><br>
+
+                The key difference between immediate mode and retained mode API design lies in lifetime management.
+            </p>
+            
+            <h3>Retained Mode: Manual Object Management</h3>
+            
+            <p>
+                In a retained mode API, objects must be explicitly created and destroyed.<br>
+                For example, in Unity, rendering a sprite requires a SpriteRenderer component 
+                attached to a GameObject. This approach has drawbacks, particularly in dynamically drawn elements<br><br>
+
+                In these scenarios, you must manually handle object lifetimes, storing them in arrays or other
+                objects and ensuring proper cleanup, a tedious and error-prone process.
+            </p>
+
+            <h3>Immediate Mode: Stateless and Flexible</h3>
+
+            <p>
+                An immediate mode API, on the other hand, eliminates this complexity.<br>
+                Instead of persisting objects, every frame the Sprites are "created" and "freed". Every call to a function like "draw_sprite"
+                writes data into a linear buffer, and at the end of the frame, a single counter set to 0 clears everything.<br><br>
+                
+                This makes the system stateless, flexible, and lightweight.
+            </p>
+
+            <h3>Glimmer Chain Uses Immediate Mode</h3>
+            
+            <p>
+                In Glimmer Chain, every entity is drawn dynamically each frame. 
+                Each entity type has a callback function that issues all the necessary "draw_sprite" calls.<br>
+
+                Examples of Immediate Mode in Action:
+            </p>
+
+            <ul>
+                <li>
+                    The player dynamically switches between different sprites depending on 
+                    its state, while also performing next-frame prediction for smoother rendering.
+                </li>
+
+                <li>
+                    Gravity-changing and time-extending power-ups apply a sinusoidal visual effect, 
+                    even though the entity itself doesn't actually move or scale.
+                </li>
+
+                <li>
+                    Bouncing platforms consist of two separate sprites, yet don't require a complex GameObject hierarchy.
+                </li>
+
+                <li>
+                    <a href="#imm_particles">Particles</a> make multiple "draw_sprite" calls, keeping everything lightweight and responsive.
+                </li>
+            </ul>
+
+            <p>
+                By leveraging immediate mode rendering, Glimmer Chain achieves better performance, simplified object
+                management, and smoother animations—all without the overhead of a traditional retained mode system.
+            </p>
+            
+        </div>
+        
+        <h2 id="imm_particles">Immediate Mode Particles</h2>
+
+        <div class="content">
+            <p>
+                Something you get when making a game from scratch is discovering unique ways of doing things.<br>
+
+                Creating a retained mode particle system, like the one used in Unity, typically requires a lot
+                of infrastructure: a format specification to describe how particles are emitted and updated,
+                serialization and deserialization logic with versioning and data maintenance, and an editor to
+                visualize and tweak parameters. And even then, such a system quickly runs into limitations 
+                depending on how the format is designed.<br><br>
+
+                This approach makes sense if you're working with complex particles or
+                if you want non-programmer artists to be able to define them freely.<br><br>
+
+                In Glimmer Chain, however, there's no need for such complexity.
+                The particles are simple and fully defined by code.<br>
+
+                Thanks to the flexibility of the <a href="#imm_rendering">immediate mode rendering</a> system and some
+                ideas inspired by procedural generation, you can define a particle effect using just a function.
+                This function takes a seed (a 64-bit number) and a timer, and produces a visual effect through a few "draw_sprite" calls.<br><br>
+
+                Because the random functions are deterministic when using the same seed, the result is always the same
+                without needing external data, complicated formats, or the overhead of maintaining editors and file compatibility.<br><br>
+
+                For a basic example, imagine a particle effect where multiple particles are emitted and each one performs a simple linear interpolation between two points:
+            </p>
+
+            <pre class="code">
+void draw_particles_with_linear_interpolation(v2 position, u64 seed, f32 timer)
+{
+    set_seed(seed);
+
+    u32 number_of_particles = u32_random_range(10, 12);
+
+    for (i32 i = 0; i < number_of_particles; i++)
+    {
+        f32 angle = f32_random_range(0.f, TAU);
+        f32 distance = f32_random_range(2.f, 3.f);
+        f32 duration = f32_random_range(1.5f, 2.5f);
+        f32 size = f32_random_range(0.5f, 0.8f);
+
+        if (timer > duration) continue; // Particle is finished
+
+        v2 target = position + v2_direction(angle) * distance;
+        f32 normalized_timer = timer / duration;
+
+        f32 n = f32_pow(normalized_timer, 0.5f); // Apply a curve to the interpolation
+        v2 current_position = v2_lerp(position, target, n);
+
+        Color color = RED;
+        color.a = 1.f - normalized_timer;
+
+        draw_sprite(current_position, size, color);
+    }
+}</pre>
+        </div>
+
+        <div class="video"><iframe src="https://www.youtube.com/embed/l7Ny4x3vGic?si=UukBa8w-mnGFaIZ_" frameborder="0" allowfullscreen></iframe></div>
 
         <h2 id="team">The Team</h2>
 
