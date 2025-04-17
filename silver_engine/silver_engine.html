@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jose Romaguera</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Silver Engine</h1>
+        <div class="video"><iframe src="https://www.youtube.com/embed/I2N-Mw5U8VE?si=0lXFIKUMu77ElM3X" frameborder="0" allowfullscreen></iframe></div>
+    </header>
+    <section>
+        <h2>What is Silver Engine?</h2>
+
+        <div class="content">
+            <p>
+                Silver Engine is a 3D game engine built from the ground up using C++ and Vulkan.<br>
+                It's my first game engine and includes a fully functional editor, allowing users to develop games and write gameplay code directly in C++.<br><br>
+
+                Originally created for fun and learning, it served as a sandbox where I could experiment with
+                rendering techniques and various systems.<br>
+                Over time, it evolved into the core codebase for my personal projects, including
+                <a href="../glimmer_chain/glimmer_chain.html">Glimmer Chain</a>, which was successfully shipped to the public.<br><br>
+
+                The codebase includes various core systems that replaces the standard C/C++ libraries.<br>
+            </p>
+        </div>
+
+        <h2 id="about">About Silver Engine</h2>
+
+        <div class="content">
+            <ul>
+                <li><a href="#dev_details">Development Details</a></li>
+                <ul>
+                    <li><a href="#memory">Memory Management</a></li>
+                    <li><a href="#replacing_std">Replacing Standard Libraries</a></li>
+                    <li><a href="#rendering">Rendering Modules</a></li>
+                    <li>TODO: Sound Engine</li>
+                    <li>TODO: From Scratch UI</li>
+                    <li>TODO: Asset System</li>
+                    <li>TODO: Platform Layer</li>
+                    <li>TODO: Job System</li>
+                </ul>
+                <li><a href="#deprecated">Deprecated Features</a></li>
+            </ul>
+        </div>
+
+        <h2 id="dev_details">Development Details</h2>
+
+        <h2 id="memory">Memory Management</h2>
+
+        <div class="content">
+            <p>
+                When we think about memory management in C/C++, the usual suspects are malloc/free and smart pointers.
+                But that's just scratching the surface. Modern hardware and operating systems offer virtual memory, which does
+                far more than just isolate processes for safety. It also allows for continuous virtual memory ranges,
+                letting the OS map memory pages across RAM (and even the hard drive) transparently.<br><br>
+
+                The problem with malloc, free, and the abstractions built on top of them is that they don't really align
+                with how programs actually use memory. While they're flexible for individual allocations, if you take a
+                closer look at your allocation patterns, you'll notice that most objects can be grouped together and share the same lifetime.<br><br>
+
+                That's where arena allocators come in. An arena (or linear allocator) lets you allocate a group of objects that share a
+                lifetime, and then free them all at once with a single call when they're no longer needed.
+            </p>
+
+            <h3>Benefits of Arena Allocators:</h3>
+            <ul>
+                <li>
+                    High-performance allocation: You can reserve a large chunk of virtual address space (e.g. 32 GB), and allocations
+                    only require incrementing a pointer. Committing more pages is handled as needed.
+                </li>
+                <li>
+                    High-performance deallocation: Freeing all allocations at once is significantly faster than calling free repeatedly.
+                </li>
+                <li>
+                    Ease of use: Traditional allocators require you to track every malloc with a matching free,
+                    increasing the chance of memory leaks, double frees, or use-after-free bugs. With arenas, you simply
+                    push memory and forget about it until the scope ends.
+                </li>
+                <li>
+                    Explicit allocation context: Functions can take an arena as a parameter, making it clear where memory
+                    should be allocated—useful for things like string manipulation.
+                </li>
+                <li>
+                    Faster memory access: Memory allocated by an arena tends to be completely contiguous by default, improving cache coherency and reducing cache misses.
+                </li>
+            </ul>
+
+            <p>
+                Much of my understanding of arena allocators comes from Ryan Fleury, who wrote an excellent post on the topic:
+                <a href="https://www.rfleury.com/p/untangling-lifetimes-the-arena-allocator" target="_blank">Untangling Lifetimes: The Arena Allocator</a>
+            </p>
+
+            <h3>How Silver Engine Uses Arenas:</h3>
+            <p>
+                Silver Engine provides these arena allocators by default:
+            </p>
+            <ul>
+                <li>
+                    Static Arena: Freed only when the program exits. Used for memory that is effectively permanent (e.g. system state).
+                </li>
+
+                <li>
+                    Frame Arena: Cleared at the end of each frame. Useful for temporary allocations that live during a single frame.
+                </li>
+
+                <li>
+                    Scratch Arena: Acts as a per-thread temporary stack. Handy for short-lived intermediate operations.
+                </li>
+            </ul>
+        </div>
+
+        <h2 id="replacing_std">Replacing Standard Libraries</h2>
+
+        <div class="content">
+            <p>
+                The C++ standard library has become increasingly complex with each new version of the language.
+                It's built on top of a stack of features like RAII, operator overloading,
+                templates, manual memory management (new/delete), and smart pointers.<br><br>
+
+                At some point in development, it becomes hard to understand what's really happening under the hood.
+                You might end up with subtle memory leaks, redundant allocations, or even serious safety issues without clear visibility.<br><br>
+
+                Some languages like Rust attempt to solve these issues by introducing strict lifetime tracking,
+                but this often comes at the cost of added complexity and mental overhead for the programmer.<br><br>
+
+                Instead of layering more abstractions, I prefer addressing the problem at its root. That's why
+                I built my own standard library functions, based on <a href="#memory">Arena allocators</a>, avoiding unnecessary language
+                features and keeping things simple, explicit, and predictable.
+            </p>
+
+            <h3>Strings</h3>
+
+            <p>
+                Traditional C strings use null-terminated character arrays, which come with several drawbacks.
+                To determine the length of a string, you need to iterate through the entire buffer until a null character is found.
+                Taking slices is awkward, and if the null terminator is missing, due to a bug or corrupted data, it can lead to undefined
+                behavior or even fatal memory access errors.<br><br>
+
+                C++ strings, on the other hand, manage memory internally using RAII, which introduces hidden allocations and
+                potential performance issues. They also make it easy to introduce subtle bugs, and taking a slice requires using
+                an entirely different data structure.<br><br>
+                
+                In Silver Engine, strings are simplified. They are not null-terminated, and they don't manage memory themselves.
+                Instead, when needed, string functions can allocate memory through an arena allocator. A string is
+                simply a slice: a pointer and a size. This makes strings easy to work with, efficient, and flexible.
+            </p>
+
+            <h3>Collections</h3>
+
+            <p>
+                In Silver Engine, collections are also custom-built. It includes hash tables, dynamic arrays,
+                string builders, static arrays, and even a space partitioning table. Most of these structures are arena-based,
+                allocating memory in blocks as needed for performance and simplicity.<br><br>
+
+                This is also the only place where I use C++ templates, strictly for convenience.
+            </p>
+
+            <h3>Math</h3>
+
+            <p>
+                Games require a solid foundation in linear algebra, including vectors, matrices, and quaternions. These are essential
+                for handling transformations, physics simulations, and camera logic. Additionally, many physics systems rely on geometric
+                intersection tests, which are also part of this module and can be reused across different systems.
+            </p>
+
+            <h3>Random Number Generation</h3>
+
+            <p>
+                Pseudorandom number generators have a property that many programmers don't usually consider: they are deterministic.<br>
+                This means that, given the same seed, they will always produce the same sequence of “random” numbers.<br><br>
+
+                A good example of this in action can be found in <a href="../glimmer_chain/glimmer_chain.html#imm_particles">Glimmer Chain</a>,
+                where it's used for particle effects, and in <a href="../voxel_game.html">Voxel Game</a>, where it's used for terrain generation.<br><br>
+
+                My random functions are based on the SplitMix algorithm. They use a combination of a fixed seed and a seed mask, which is
+                updated on every call to a random function. Both values are stored in a thread-local context, allowing deterministic behavior
+                while supporting multithreaded use.
+            </p>
+
+            <pre class="code">
+u64 u64_random() {
+    u64 seed = context.seed ^ context.seed_mask;
+    u64 result = random_splitmix64(&seed);
+    context.seed_mask = seed;
+    return result;
+}
+
+u32 u32_random() {
+    return (u32)u64_random();
+}
+f32 f32_random() {
+    u32 v = u32_random() & 0xFFFFFF;
+    return (f32)v / (f32)0xFFFFFF;
+}
+f32 f32_random_max(f32 max) {
+    return f32_random() * max;
+}
+f32 f32_random_range(f32 min, f32 max) {
+    return min + f32_random() * (max - min);
+}</pre>
+
+            <h3>Timing Functions</h3>
+
+            <p>
+                When using the C++ standard library for timing, you're often faced with a maze of classes, templates, and opaque functions.<br>
+                Why should something as simple as measuring time feel so unnecessarily complex?<br><br>
+
+                Silver Engine provides a clear and minimal set of functions and structs that have been more than enough for every use case I've encountered so far:
+            </p>
+
+            <pre class="code">
+struct Date {
+    u32 year;
+    u32 month;
+    u32 day;
+    u32 hour;
+    u32 minute;
+    u32 second;
+    u32 millisecond;
+};
+
+struct {
+    u64 start_clock_counter;
+    u64 clock_frequency;
+    
+    u64 frame_count;
+    f64 start_frame;
+    f32 delta_time;
+    u32 FPS;
+    f32 smooth_FPS;
+    u32 smooth_FPS_counter;
+} timer;
+
+u64 os_get_clock_counter(); // QueryPerformanceCounter on Windows
+Date os_get_date();
+
+f64 timer_now(); // Seconds since start of the program
+u64 timer_seed(); // Used for non-deterministics behaviours on random functions
+
+// Notice that timer_now() = (os_get_clock_counter() - timer.start_clock_counter) / timer.clock_frequency
+
+u64 timer_calculate_cpu_frequency();
+void timer_limit_fps(u32 frame_rate, f64 start_of_frame); // Sleeps the thread to match the given frame rate</pre>
+
+        </div>
+
+        <h2 id="rendering">Rendering Modules</h2>
+
+        <div class="content">
+            <p>
+                The engine features a custom GraphicsAPI that wraps the internals of OpenGL, DirectX11, and Vulkan, enabling multiplatform support.<br>
+                It also includes some rendering modules:
+            </p>
+
+            <h3>2D Immediate Mode Renderer</h3>
+
+            <p>
+                Uses a technique called batch rendering to efficiently draw sprites to the screen.<br>
+                It supports both simple sprites and more advanced ones.<br><br>
+
+                The advanced sprites have a variety of visual effects, such as rounded corners, borders, and color fades.<br>
+                These are typically used in UI elements.<br><br>
+
+                Below is a screenshot of a unfinished application built with Silver Engine:
+            </p>
+
+            <img class="screenshot" src="stock_app.png">
+
+            <h3>Text</h3>
+
+            <p>
+                Text is one of the most underrated aspects of graphical applications.<br>
+                We all expect clean text rendering across different resolutions, sizes, fonts, and even languages.<br>
+                But building a robust text renderer that handles all of this dynamically is a real challenge.<br><br>
+
+                Here's an overview of the steps involved in displaying text in Silver Engine:
+            </p>
+
+            <ul>
+                <li>Start by selecting a font, usually in .ttf format.</li>
+                <li>Define the set of characters you plan to use.</li>
+                <li>Rasterize those characters into a texture using vector graphics and apply Signed Distance Fields (SDF).</li>
+                <li>Store metadata for each glyph, including paddings and sizing info.</li>
+                <li>For languages like Chinese with thousands of characters, this process must be repeated whenever new characters are needed.</li>
+                <li>To render the text, iterate through all characters and calculate their positions on screen.</li>
+                <li>Handle alignment, centering, and line wrapping as needed.</li>
+                <li>Finally, use the character positions and the SDF atlas to draw each glyph on screen.</li>
+            </ul>
+
+            <p>
+                That's the basic workflow behind dynamically rendered, high-quality text.<br><br>
+
+                Below is an example SDF texture extracted from Glimmer Chain:
+            </p>
+
+            <img class="screenshot" src="sdf.png">
+
+            <h3>Shader Compilation</h3>
+
+            <p>
+                All shaders must be compiled before execution, and this process is handled
+                manually through a shader compilation module in Silver Engine.<br><br>
+                This module processes every .shader file and generates binaries for each supported
+                Graphics API, using dxcompiler under the hood.<br>
+                A .shader file is a custom format designed for Silver Engine. It contains multiple
+                shader stages, such as vertex, pixel, and compute. All within the same file.
+            </p>
+        </div>
+
+        <h2 id="deprecated">Deprecated Features</h2>
+
+        <div class="content">
+            <p>
+                Over time, I implemented a wide range of features for the engine. However, many of them were later
+                removed as the engine evolved into more of a modular framework, allowing me to reuse components across different projects.<br>
+
+                Below is a list of features that were implemented at various stages:
+            </p>
+            <ul>
+                <li>3D Mesh Rendering</li>
+                <li>2D Sprite Rendering</li>
+                <li>Diffuse and Specular Lighting</li>
+                <li>Cascaded Shadow Mapping</li>
+                <li>Terrain Rendering</li>
+                <li>CPU Retained Particle System</li>
+                <li>Bloom Effect</li>
+                <li>Screen Space Ambient Occlusion (SSAO)</li>
+                <li>Generic Entity-Component System (ECS)</li>
+                <li>C++ Game Code with Hot Reloading</li>
+                <li>Sound Engine</li>
+                <li>Immediate Mode UI</li>
+                <li>3D Physics (integrated with PhysX)</li>
+                <li>Unity-like Editor</li>
+            </ul>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>© 2024 Jose Romaguera. All rights reserved.</p>
+    </footer>
+</body>
