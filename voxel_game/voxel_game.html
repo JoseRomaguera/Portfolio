@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jose Romaguera</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h1>Voxel Game</h1>
+        <div class="video"><iframe src="https://www.youtube.com/embed/02UK8YKMJ6Q" frameborder="0" allowfullscreen></iframe></div>
+    </header>
+    <section>
+        <h2>What is Voxel Game?</h2>
+
+        <div class="content">
+            <p>
+                Voxel Game is a multiplayer sandbox game with a procedurally generated open world.<br>
+
+                It's a Minecraft-inspired hobby project I created for fun and learning. The game is built using my custom engine, <a href="../silver_engine/silver_engine.html">Silver Engine</a>.
+            </p>
+        </div>
+
+        <h2 id="about">About Voxel Game</h2>
+
+        <div class="content">
+            <ul>
+                <li><a href="#dev_details">Development Details</a></li>
+                <ul>
+                    <li><a href="#proc_gen_overview">Procedural Generation</a></li>
+                    <ul>
+                        <li><a href="#proc_gen_overview">Overview</a></li>
+                        <li><a href="#proc_gen_voronoi">Voronoi Noise</a></li>
+                        <li><a href="#proc_gen_perlin">Perlin Noise</a></li>
+                        <li><a href="#proc_gen_mixing">Mixing Noises</a></li>
+                    </ul>
+                    <li><a href="#world_layout">World Layout</a></li>
+                    <li><a href="#render_distance">Render Distance of 100km</a></li>
+                    <li><a href="#networking">Custom Networking Protocol</a></li>
+                </ul>
+            </ul>
+        </div>
+
+        <h2 id="dev_details">Development Details</h2>
+
+        <h2 id="proc_gen_overview">Procedural Generation - Overview</h2>
+
+        <div class="content">
+            <p>
+                To generate a procedural world, you need an algorithm that defines terrain height, biomes, and geographical features.
+                These rules must be randomly generated but still produce natural-looking patterns.
+                A lot of research has gone into this, and the most common base algorithm is Perlin noise. However,
+                most third-party libraries generate fixed-size images, which makes them incompatible with infinite worlds.<br><br>
+
+                For an infinite world, you need something faster, simpler, and stateless. That's why I implemented my own noise
+                functions, designed to behave like pure mathematical formulas. Given just a seed, and an (X, Y) coordinate, you get
+                a deterministic output, ideal for consistent terrain generation without storing or precomputing anything.
+            </p>
+        </div>
+
+        <h2 id="proc_gen_voronoi">Procedural Generation - Voronoi Noise</h2>
+
+        <div class="content">
+            <p>
+                Voronoi noise generates a cell-like pattern with evenly sized regions, making it ideal for biome distribution.<br>
+
+                My implementation returns:
+            </p>
+
+            <ul>
+                <li>A 64-bit integer that uniquely identifies the biome.</li>
+                <li>A transition factor to blend smoothly when close to a biome border.</li>
+                <li>The center point of the current cell.</li>
+            </ul>
+
+            <p>
+                It's a grid-based algorithm. Each cell contains a random point (computed on the fly with an offset).
+                When sampling a coordinate, the algorithm checks nearby cells and selects the closest point,
+                determining which biome the position belongs to.<br><br>
+
+                Below is a ShaderToy visualization showing how the algorithm is used to distribute biomes.<br>
+                It uses screen positions as coordinates in the Voronoi algorithm.<br>
+            </p>
+        </div>
+
+        <div class="video"><iframe src="https://www.youtube.com/embed/6lo9M5aR0gw?si=qCYvfR_ttQ9KzSbP" frameborder="0" allowfullscreen></iframe></div>
+
+        <h2 id="proc_gen_perlin">Procedural Generation - Perlin Noise</h2>
+
+        <div class="content">
+            <p>
+                Perlin Noise is one of the most popular algorithms for procedural terrain.<br>
+                In 1D, it creates a natural wave. In 2D, it produces a continuous and organic landscape.<br><br>
+
+                My implementation is stateless and extremely fast: given a seed and a coordinate, it returns a value between 0 and 1.<br>
+                It's grid-based, which means it's ideal for infinite or large-scale worlds. However, a single call doesn't produce detailed
+                terrain, so I combine multiple layers of Perlin Noise with different frequencies and amplitudes to generate richer and more
+                realistic terrain features.<br><br>
+
+                In the Voxel Game, it's used to shape:
+            </p>
+            <ul>
+                <li>Heights</li>
+                <li>Mountains and rivers</li>
+                <li>Temperature maps for biome selection</li>
+            </ul>
+
+            <p>
+                Below is a ShaderToy demo:<br>
+                First, it shows a single call to my Perlin implementation. Then, a layered combination
+                is shown.<br>
+                The output is filtered to simulate oceans and continents.
+            </p>
+        </div>
+
+        <div class="video"><iframe src="https://www.youtube.com/embed/llqhpj0kDoY?si=t-ZsnGfmXYqQWH3y" frameborder="0" allowfullscreen></iframe></div>
+
+        <h2 id="proc_gen_mixing">Procedural Generation - Mixing Noises</h2>
+
+        <div class="content">
+            <p>
+                The result of these techniques is a versatile and infinite world generation system, capable of
+                customizing each biome, enabling smooth transitions, and providing deterministic outputs.<br><br>
+                
+                As shown in the left image, it's even possible to know exactly which biome or height will appear before the world is generated.<br><br>
+
+                Below are two in-game screenshots:<br>
+                Left: view from above, showing biome distribution over a world that hasn't even been generated yet.<br>
+                Right: a desert scene at sunset.
+            </p>
+
+            <img class="screenshot" src="world_gen.png">
+        </div>
+
+        <h2 id="world_layout">World Layout</h2>
+
+        <div class="content">
+            <p>
+                The world is divided in different layers because depending on the problem to solve, some scales work
+                better than others.<br><br>
+                
+                The first block group is the chunk, like Minecraft but in my game is 30x30x30 blocks.<br>
+                This is optimal for fast loading-unloading, dynamic lighting calculations, physics, updating blocks,
+                drawing more complex shapes like ramps, pillars or stairs, and fast compression/decompression.<br><br>
+
+                However, for world generation and for serializing worlds into files, it's more efficient to create a bigger group,
+                literally a chunk of chunks.<br>
+                I called it sections, and are 20x180x20 chunks. At this level, the file serialization
+                and world generation takes place, also a data structure optimal for ray marching is created for rendering.
+            </p>
+        </div>
+
+        <h2 id="render_distance">Render Distance of 100km</h2>
+
+        <div class="content">
+            <p>
+                After understanding the design of the <a href="#world_layout">world layout</a> and the properties
+                of the <a href="#proc_gen_overview">world generation</a>, it becomes much easier to see how it's possible
+                to have a render distance of 100km in an infinite procedurally generated world.<br><br>
+
+                Rendering is divided into three different techniques, each with decreasing quality but increasing performance:
+            </p>
+            <ul>
+                <li>
+                    The first is the chunk renderer, which uses traditional greedy meshing like Minecraft.
+                </li>
+
+                <li>
+                    Then, as mentioned in the <a href="#world_layout">world layout</a>, sections generate a data structure used for ray marching on the GPU.<br>
+                    This allows for several kilometers of render distance, showing buildings, lighting, and terrain with a precision of 3 blocks.
+                </li>
+
+                <li>
+                    Finally, terrain rendering is done using 5x5 km tiles. These are generated using the height and biome functions,
+                    meaning the terrain doesn't need to be generated beforehand to determine elevation or biome information.
+                </li>
+            </ul>
+            </p>
+        </div>
+
+        <h2 id="networking">Custom Networking Protocol</h2>
+
+        <div class="content">
+            <p>
+                To support multiplayer, I developed my own networking protocol.<br><br>
+
+                Using TCP for real-time applications—such as games or physics engines—can be problematic. Often,
+                you don't need in-order or guaranteed delivery, and paying the overhead for those features can
+                quickly saturate the network.<br><br>
+
+                Also, it's not possible to have both TCP and UDP connections on the same port.<br><br>
+
+                One possible solution would be to use separate ports for different types of data, but for the sake of simplicity,
+                and for fun and learning, I built my own networking protocol based on UDP.<br><br>
+
+                Raw UDP comes with limitations: it only sends unconnected messages, with no guarantee
+                of delivery or ordering, and no concept of connections.<br>
+                That's why my custom protocol adds several features on top of UDP:
+            </p>
+            <ul>
+                <li>Connection management</li>
+                <li>In-order and reliable message delivery (like TCP)</li>
+                <li>Optional fast and unreliable delivery (raw UDP-style)</li>
+            </ul>
+
+            <img class="screenshot" src="voxel0.png">
+        </div>
+
+    </section>
+
+    <footer>
+        <p>© 2024 Jose Romaguera. All rights reserved.</p>
+    </footer>
+</body>

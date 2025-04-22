@@ -174,7 +174,7 @@
                 This means that, given the same seed, they will always produce the same sequence of “random” numbers.<br><br>
 
                 A good example of this in action can be found in <a href="../glimmer_chain/glimmer_chain.html#imm_particles">Glimmer Chain</a>,
-                where it's used for particle effects, and in <a href="../voxel_game.html">Voxel Game</a>, where it's used for terrain generation.<br><br>
+                where it's used for particle effects, and in <a href="../voxel_game/voxel_game.html">Voxel Game</a>, where it's used for terrain generation.<br><br>
 
                 My random functions are based on the SplitMix algorithm. They use a combination of a fixed seed and a seed mask, which is
                 updated on every call to a random function. Both values are stored in a thread-local context, allowing deterministic behavior
