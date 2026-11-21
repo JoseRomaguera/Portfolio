@@ -3,61 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jose Romaguera — programmer specialized in low-level systems, game engines and real-time applications.">
+    <meta name="theme-color" content="#0b0d12">
     <title>Jose Romaguera</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
+    <header class="hero">
+        <p class="eyebrow">// Low-level · Game Engines · Real-time</p>
         <h1>Jose Romaguera</h1>
-        <p>
-            My name is Jose Romaguera, from Valencia, Spain.<br>
-            I'm a programmer specialized in low-level systems, game engines, and real-time applications.<br><br>
-            As a professional developer, my job is to deeply understand the problems I'm solving to provide simple, reliable, high-quality, and high-performance solutions.<br>
-            I've been programming since 2017, starting as a self-taught developer, always passionate about low-level programming and building Game Engines from scratch.
-            <br>
-            <a class="more_about_me" href="about/about.html">More about me</a>
+        <p class="lead">
+            Programmer from Valencia, Spain, specialized in low-level systems, game engines, and real-time applications.
         </p>
+        <p>
+            As a professional developer, my job is to deeply understand the problems I'm solving to provide simple, reliable,
+            high-quality, and high-performance solutions. I've been programming since 2017, starting as a self-taught developer,
+            always passionate about low-level programming and building game engines from scratch.
+        </p>
+        <div class="hero-actions">
+            <a class="btn primary" href="about/about.html">More about me →</a>
+            <a class="btn" href="cv_en.pdf" download>CV (English)</a>
+            <a class="btn" href="cv_es.pdf" download>CV (Español)</a>
+            <a class="btn" href="https://github.com/JoseRomaguera" target="_blank" rel="noopener">GitHub</a>
+        </div>
     </header>
+
     <section>
         <h2>Corporate Projects</h2>
+        <div class="grid">
+            <a class="card" href="soul_breach.html">
+                <span class="arrow">↗</span>
+                <span class="meta">Cosmic Spell</span>
+                <h3>Soul Breach</h3>
+                <p>Turn-based combat RPG featuring both PvP and PvE.</p>
+                <div class="tags"><span>Unity</span><span>C#</span><span>Kotlin</span></div>
+            </a>
+            <a class="card" href="coding_day.html">
+                <span class="arrow">↗</span>
+                <span class="meta">Dreamlight Games</span>
+                <h3>Coding Day</h3>
+                <p>2D survival game: make it through the night in a dark office building full of mysteries and dangers.</p>
+                <div class="tags"><span>Unity</span><span>C#</span></div>
+            </a>
+        </div>
 
-        <div class="content">
-            <ul class="button">
-                <li class="button"><a href="soul_breach.html">Soul Breach — 2D Game — Cosmic Spell</a></li>
-                <li class="button"><a href="coding_day.html">Coding Day — 2D Game — Dreamlight Games</a></li>
-            </ul>
-        </div>
         <h2>Independent Commercial Projects</h2>
-        <div class="content">
-            <ul class="button">
-                <li class="button"><a href="https://github.com/JoseRomaguera/Yov-Lang" target="_blank">Yov Programming Language</a></li>
-                <li class="button"><a href="glimmer_chain/glimmer_chain.html">Glimmer Chain — 2D Game</a></li>
-                <li class="button"><a href="silver_engine/silver_engine.html">Silver Engine — 2D and 3D Game Engine</a></li>
-            </ul>
+        <div class="grid">
+            <a class="card" href="glimmer_chain/glimmer_chain.html">
+                <span class="arrow">↗</span>
+                <span class="meta">Released 2024</span>
+                <h3>Glimmer Chain</h3>
+                <p>Skill-based 2D platformer built on a custom C++ engine, with deterministic physics and a global ranking.</p>
+                <div class="tags"><span>C++</span><span>Custom engine</span></div>
+            </a>
+            <a class="card" href="silver_engine/silver_engine.html">
+                <span class="arrow">↗</span>
+                <span class="meta">2D &amp; 3D Game Engine</span>
+                <h3>Silver Engine</h3>
+                <p>Game engine and editor built from the ground up, replacing the standard C/C++ libraries.</p>
+                <div class="tags"><span>C++</span><span>Vulkan</span></div>
+            </a>
+            <a class="card" href="https://github.com/JoseRomaguera/Yov-Lang" target="_blank" rel="noopener">
+                <span class="arrow">↗</span>
+                <span class="meta">GitHub</span>
+                <h3>Yov Programming Language</h3>
+                <p>My own programming language.</p>
+                <div class="tags"><span>Compilers</span></div>
+            </a>
         </div>
+
         <h2>Independent Hobby Projects</h2>
-        <div class="content">
-            <ul class="button">
-                <li class="button"><a href="voxel_game/voxel_game.html">Voxel Game — Multiplayer 3D Game</a></li>
-                <li class="button"><a href="https://github.com/JoseRomaguera/8086-Simulator" target="_blank">8086 CPU Simulator</a></li>
-            </ul>
+        <div class="grid">
+            <a class="card" href="voxel_game/voxel_game.html">
+                <span class="arrow">↗</span>
+                <span class="meta">Multiplayer 3D Game</span>
+                <h3>Voxel Game</h3>
+                <p>Multiplayer sandbox with a procedurally generated open world and a custom UDP networking protocol.</p>
+                <div class="tags"><span>C++</span><span>Networking</span><span>Proc-gen</span></div>
+            </a>
+            <a class="card" href="https://github.com/JoseRomaguera/8086-Simulator" target="_blank" rel="noopener">
+                <span class="arrow">↗</span>
+                <span class="meta">GitHub</span>
+                <h3>8086 CPU Simulator</h3>
+                <p>Simulator of the Intel 8086 processor.</p>
+                <div class="tags"><span>Low-level</span></div>
+            </a>
         </div>
 
         <h2>Contact</h2>
-        <div class="content">
-            <p>
-                Email: joselrm890@gmail.com<br>
-                Phone: +34 633040115<br>
-
-                <a href="cv_es.pdf" download>Descargar CV en Español</a><br>
-                <a href="cv_en.pdf" download>Download CV in English</a><br>
-
-                <a href="https://www.youtube.com/@JoseRomagueraM" target="_blank">YouTube</a><br>
-                <a href="https://www.linkedin.com/in/jose-romaguera-montero-a2a8a9201" target="_blank">LinkedIn</a><br>
-                <a href="https://github.com/JoseRomaguera" target="_blank">GitHub</a><br>
-            </p>
+        <div class="contact-grid">
+            <a class="contact-item" href="mailto:joselrm890@gmail.com">
+                <span class="label">Email</span>
+                <span class="value">joselrm890@gmail.com</span>
+            </a>
+            <a class="contact-item" href="tel:+34633040115">
+                <span class="label">Phone</span>
+                <span class="value">+34 633 040 115</span>
+            </a>
+            <a class="contact-item" href="https://www.linkedin.com/in/jose-romaguera-montero-a2a8a9201" target="_blank" rel="noopener">
+                <span class="label">LinkedIn</span>
+                <span class="value">Jose Romaguera Montero</span>
+            </a>
+            <a class="contact-item" href="https://github.com/JoseRomaguera" target="_blank" rel="noopener">
+                <span class="label">GitHub</span>
+                <span class="value">JoseRomaguera</span>
+            </a>
+            <a class="contact-item" href="https://www.youtube.com/@JoseRomagueraM" target="_blank" rel="noopener">
+                <span class="label">YouTube</span>
+                <span class="value">@JoseRomagueraM</span>
+            </a>
         </div>
-
     </section>
 
     <footer>

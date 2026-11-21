@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+    <nav class="topbar"><div class="topbar-inner"><a class="brand" href="../index.html">jose<span>.</span>romaguera</a><a href="../index.html">← All projects</a></div></nav>
     <header>
         <h1>Silver Engine</h1>
-        <div class="video"><iframe src="https://www.youtube.com/embed/I2N-Mw5U8VE?si=0lXFIKUMu77ElM3X" frameborder="0" allowfullscreen></iframe></div>
+        <div class="video"><iframe src="https://www.youtube.com/embed/I2N-Mw5U8VE?si=0lXFIKUMu77ElM3X" frameborder="0" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
     </header>
     <section>
         <h2>What is Silver Engine?</h2>
@@ -49,7 +50,7 @@
 
         <h2 id="dev_details">Development Details</h2>
 
-        <h2 id="memory">Memory Management</h2>
+        <h3 id="memory">Memory Management</h3>
 
         <div class="content">
             <p>
@@ -66,7 +67,7 @@
                 lifetime, and then free them all at once with a single call when they're no longer needed.
             </p>
 
-            <h3>Benefits of Arena Allocators:</h3>
+            <h4>Benefits of Arena Allocators:</h4>
             <ul>
                 <li>
                     High-performance allocation: You can reserve a large chunk of virtual address space (e.g. 32 GB), and allocations
@@ -94,7 +95,7 @@
                 <a href="https://www.rfleury.com/p/untangling-lifetimes-the-arena-allocator" target="_blank">Untangling Lifetimes: The Arena Allocator</a>
             </p>
 
-            <h3>How Silver Engine Uses Arenas:</h3>
+            <h4>How Silver Engine Uses Arenas:</h4>
             <p>
                 Silver Engine provides these arena allocators by default:
             </p>
@@ -113,7 +114,7 @@
             </ul>
         </div>
 
-        <h2 id="replacing_std">Replacing Standard Libraries</h2>
+        <h3 id="replacing_std">Replacing Standard Libraries</h3>
 
         <div class="content">
             <p>
@@ -132,7 +133,7 @@
                 features and keeping things simple, explicit, and predictable.
             </p>
 
-            <h3>Strings</h3>
+            <h4>Strings</h4>
 
             <p>
                 Traditional C strings use null-terminated character arrays, which come with several drawbacks.
@@ -149,7 +150,7 @@
                 simply a slice: a pointer and a size. This makes strings easy to work with, efficient, and flexible.
             </p>
 
-            <h3>Collections</h3>
+            <h4>Collections</h4>
 
             <p>
                 In Silver Engine, collections are also custom-built. It includes hash tables, dynamic arrays,
@@ -159,7 +160,7 @@
                 This is also the only place where I use C++ templates, strictly for convenience.
             </p>
 
-            <h3>Math</h3>
+            <h4>Math</h4>
 
             <p>
                 Games require a solid foundation in linear algebra, including vectors, matrices, and quaternions. These are essential
@@ -167,7 +168,7 @@
                 intersection tests, which are also part of this module and can be reused across different systems.
             </p>
 
-            <h3>Random Number Generation</h3>
+            <h4>Random Number Generation</h4>
 
             <p>
                 Pseudorandom number generators have a property that many programmers don't usually consider: they are deterministic.<br>
@@ -203,7 +204,7 @@ f32 f32_random_range(f32 min, f32 max) {
     return min + f32_random() * (max - min);
 }</pre>
 
-            <h3>Timing Functions</h3>
+            <h4>Timing Functions</h4>
 
             <p>
                 When using the C++ standard library for timing, you're often faced with a maze of classes, templates, and opaque functions.<br>
@@ -248,7 +249,7 @@ void timer_limit_fps(u32 frame_rate, f64 start_of_frame); // Sleeps the thread t
 
         </div>
 
-        <h2 id="rendering">Rendering Modules</h2>
+        <h3 id="rendering">Rendering Modules</h3>
 
         <div class="content">
             <p>
@@ -256,7 +257,7 @@ void timer_limit_fps(u32 frame_rate, f64 start_of_frame); // Sleeps the thread t
                 It also includes some rendering modules:
             </p>
 
-            <h3>2D Immediate Mode Renderer</h3>
+            <h4>2D Immediate Mode Renderer</h4>
 
             <p>
                 Uses a technique called batch rendering to efficiently draw sprites to the screen.<br>
@@ -270,7 +271,7 @@ void timer_limit_fps(u32 frame_rate, f64 start_of_frame); // Sleeps the thread t
 
             <img class="screenshot" src="stock_app.png">
 
-            <h3>Text</h3>
+            <h4>Text</h4>
 
             <p>
                 Text is one of the most underrated aspects of graphical applications.<br>
@@ -299,7 +300,7 @@ void timer_limit_fps(u32 frame_rate, f64 start_of_frame); // Sleeps the thread t
 
             <img class="screenshot" src="sdf.png">
 
-            <h3>Shader Compilation</h3>
+            <h4>Shader Compilation</h4>
 
             <p>
                 All shaders must be compiled before execution, and this process is handled
